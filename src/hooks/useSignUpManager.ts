@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ISignUpManager from '../interfaces/ISignUpManager';
 import axios from 'axios';
 import requests from '../requests';
+import { useUserListManager } from '../contexts/UserListContext';
 
 interface State {
     user_id: string;
@@ -17,6 +18,7 @@ const initialState: State = {
 
 export default function useSignUpManager(): ISignUpManager {
     const [state, setState] = useState(initialState);
+    const userListManager = useUserListManager();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -44,6 +46,7 @@ export default function useSignUpManager(): ISignUpManager {
             .post(requests.signup, params)
             .then((res) => {
                 _clear();
+                userListManager.update(); //ユーザーリストを更新する
             })
             .catch((err) => {
                 console.log(err);

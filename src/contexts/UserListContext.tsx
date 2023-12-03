@@ -1,7 +1,8 @@
 import IUserListManager from "../interfaces/IUserListManager";
 import { createContext, useContext, useEffect, useState } from "react";
 import User from '../types/User';
-
+import axios from "axios";
+import requests from "../requests";
 
 const initialValue: IUserListManager = {
     users: [],
@@ -42,6 +43,15 @@ export default function UserListProvider({ children }: UserListProviderProps) {
     function update() {
         if (!state.isUpdatable) return;
         console.log("GET /users");
+
+        axios.get(requests.getUsers)
+            .then((res) => {
+                const users = res.data.users as User[];
+                setState({ ...state, users: users });
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
     function selectUser(user_id: string) {
