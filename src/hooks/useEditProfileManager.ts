@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import IEditProfileManager from "../interfaces/IEditProfileManager";
 import User from "../types/User";
+import axios from 'axios';
+import requests from '../requests';
+import { useUserListManager } from "../contexts/UserListContext";
+import getToken from "../lib/getToken";
 
 interface State {
     nickname: string;
@@ -16,6 +20,7 @@ const initialState: State = {
 
 export default function useEditProfileManager(user: User): IEditProfileManager {
     const [state, setState] = useState(initialState);
+    const userListManager = useUserListManager();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -34,6 +39,24 @@ export default function useEditProfileManager(user: User): IEditProfileManager {
     function submit() {
         if (!state.isSubmittable) return;
         console.log("PATCH /users/:id", state);
+
+        const header = {
+            Authorization: getToken(user),
+        }
+
+        const params = {
+            nickname: state.nickname,
+            comment: state.comment,
+        }
+        
+        axios
+            .patch(requests.editProfile(user.user_id), params, { headers: header })
+            .then((res) => {
+                userListManager.update(); //ユーザーリストを更新する
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     /* Look at Me!

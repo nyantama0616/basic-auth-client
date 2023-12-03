@@ -8,6 +8,7 @@ const requests = {
     pong: "http://localhost:3000/pong",
     signup: "http://localhost:3000/signup",
     getUsers: "http://localhost:3000/users",
+    editProfile: (user_id: string) => `http://localhost:3000/users/${user_id}`,
 }
 
 export default requests;
