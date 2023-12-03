@@ -1,4 +1,4 @@
-[basic-auth-tutorial](https://github.com/nyantama0616/basic-auth-tutorial)https://github.com/nyantama0616/basic-auth-tutorialのフロントエンドを実装してみた
+[basic-auth-tutorial](https://github.com/nyantama0616/basic-auth-tutorial)のフロントエンドを実装してみた
 
 ## create-react-appで作った
 ### create-react-app時の環境
