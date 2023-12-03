@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import ISignUpManager from '../interfaces/ISignUpManager';
+import axios from 'axios';
+import requests from '../requests';
 
 interface State {
     user_id: string;
@@ -32,7 +34,20 @@ export default function useSignUpManager(): ISignUpManager {
     function submit() {
         if (!state.isSubmittable) return;
         console.log("POST /users", state);
-        _clear();
+        
+        const params = {
+            user_id: state.user_id,
+            password: state.password,
+        }
+
+        axios
+            .post(requests.signup, params)
+            .then((res) => {
+                _clear();
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     function _clear() {

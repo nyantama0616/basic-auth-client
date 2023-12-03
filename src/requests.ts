@@ -5,7 +5,8 @@
 */
 
 const requests = {
-    pong: "http://localhost:3000/pong"
+    pong: "http://localhost:3000/pong",
+    signup: "http://localhost:3000/signup",
 }
 
 export default requests;
