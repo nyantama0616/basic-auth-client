@@ -9,6 +9,7 @@ const requests = {
     signup: "http://localhost:3000/signup",
     getUsers: "http://localhost:3000/users",
     editProfile: (user_id: string) => `http://localhost:3000/users/${user_id}`,
+    close: "http://localhost:3000/close",
 }
 
 export default requests;

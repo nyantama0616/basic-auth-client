@@ -64,6 +64,19 @@ export default function useEditProfileManager(user: User): IEditProfileManager {
      */
     function destroy() {
         console.log('POST /close', { user_id: user.user_id });
+
+        const header = {
+            Authorization: getToken(user),
+        }
+
+        axios
+            .post(requests.close, null, { headers: header })
+            .then((res) => {
+                userListManager.update(); //ユーザーリストを更新する
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     useEffect(() => {
