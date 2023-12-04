@@ -18,16 +18,14 @@ export function useUserListManager() {
 }
 
 interface State {
-    users: User[];
-    selectedUser: User | null;
+    users: { [user_id: string]: User }
+    selectedUserId: string;
     isUpdatable: boolean;
 }
 
 const initialState: State = {
-    users: [
-        { user_id: "user1", password: "pass", nickname: "ぱっぴー", comment: "よろしくおねがいします" },
-    ],
-    selectedUser: null,
+    users: {},
+    selectedUserId: "",
     isUpdatable: true,
 };
 
@@ -47,7 +45,11 @@ export default function UserListProvider({ children }: UserListProviderProps) {
         axios.get(requests.getUsers)
             .then((res) => {
                 const users = res.data.users as User[];
-                setState({ ...state, users: users });
+                const usersMap: { [user_id: string]: User } = {};
+                users.forEach((user) => {
+                    usersMap[user.user_id] = user;
+                });
+                setState({ ...state, users: usersMap });
             })
             .catch((err) => {
                 console.error(err);
@@ -55,14 +57,12 @@ export default function UserListProvider({ children }: UserListProviderProps) {
     }
 
     function selectUser(user_id: string) {
-        const user = state.users.find((user) => user.user_id === user_id) || null;
-        
-        setState({ ...state, selectedUser: user });
+        setState({ ...state, selectedUserId: user_id });
     }
 
-    const value = {
-        users: state.users,
-        selectedUser: state.selectedUser,
+    const value: IUserListManager = {
+        users: Object.values(state.users),
+        selectedUser: state.users[state.selectedUserId] || null,
         selectUser: selectUser,
         update: update,
     }
